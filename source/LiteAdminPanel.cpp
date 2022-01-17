@@ -40,7 +40,7 @@ int main()
 
     while (output != "exit") {
         cout << "> ";
-        cin >> output;
+        getline(cin, output);
         if (output == "exit") {
             system("pause");
         }
