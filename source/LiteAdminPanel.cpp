@@ -1,5 +1,8 @@
 #include <iostream>
 #include <string>
+#include <stdio.h>
+#include <locale.h>
+#include <windows.h>
 #include <cmath> //hahaha, yes i know about it)
 using namespace std;
 
@@ -10,14 +13,35 @@ void help() {
     cout << "| " << "help(?) - show this text\n";
     cout << "| " << "exit - exit program\n";
     cout << "| " << "info - show info about LA\n";
+    cout << "| " << "gpu - approximate CPU load\n";
 }
 
 void info() {
-    cout << "| LiteAdminPanel version: 0.0.2\n";
+    cout << "| LiteAdminPanel version: beta-0.0.3\n";
     cout << "| github: https://github.com/orgs/LiteAdminPanel/\n";
     cout << "| discord: prorok#1433, VinkyV#7660\n";
     cout << "| LiteAdminPanel by VinkW, prorok & c++\n\n";
 }
+
+int GetCpuUsage()
+{
+    static ULARGE_INTEGER TimeIdle, TimeKernel, TimeUser;
+    FILETIME Idle, Kernel, User;
+    ULARGE_INTEGER uIdle, uKernel, uUser;
+    GetSystemTimes(&Idle, &Kernel, &User);
+    memcpy(&uIdle, &Idle, sizeof(FILETIME));
+    memcpy(&uKernel, &Kernel, sizeof(FILETIME));
+    memcpy(&uUser, &User, sizeof(FILETIME));
+    long long t;
+    t = (((((uKernel.QuadPart - TimeKernel.QuadPart) + (uUser.QuadPart - TimeUser.QuadPart)) -
+        (uIdle.QuadPart - TimeIdle.QuadPart)) * (100)) / ((uKernel.QuadPart -
+            TimeKernel.QuadPart) + (uUser.QuadPart - TimeUser.QuadPart)));
+    TimeIdle.QuadPart = uIdle.QuadPart;
+    TimeUser.QuadPart = uUser.QuadPart;
+    TimeKernel.QuadPart = uKernel.QuadPart;
+    return(static_cast<int>(t) + (static_cast<int>(t) / 2));
+}
+
 
 void error(int code) {
     if (code == 0) {
@@ -52,6 +76,9 @@ int main()
         }
         else if (output == "info") {
             info();
+        }
+        else if (output == "gpu") {
+            cout << "[info]" << "GPU load:" << GetCpuUsage() << "%\n";
         }
         else {
             error(0);
