@@ -13,7 +13,7 @@ void help() {
 }
 
 void info() {
-    cout << "| LiteAdminPanel version: 0.0.1\n";
+    cout << "| LiteAdminPanel version: 0.0.2\n";
     cout << "| github: https://github.com/orgs/LiteAdminPanel/\n";
     cout << "| discord: prorok#1433, VinkyV#7660\n";
     cout << "| LiteAdminPanel by VinkW, prorok & c++\n\n";
