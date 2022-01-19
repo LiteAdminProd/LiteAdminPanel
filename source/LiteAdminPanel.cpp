@@ -10,6 +10,7 @@
 #include <cmath> //hahaha, yes i know about it)
 using namespace std;
 
+const string version = "beta-0.0.3";
 string output;
 char buff[50];
 string buf;
@@ -26,19 +27,21 @@ void help() {
 }
 
 void info() {
-    cout << "| LiteAdminPanel version: beta-0.0.3\n";
+    cout << "| LiteAdminPanel version: " << version << endl;
     cout << "| github: https://github.com/orgs/LiteAdminPanel/\n";
     cout << "| discord: prorok#1433, VinkyV#7660\n";
-    cout << "| LiteAdminPanel by VinkW, prorok & c++\n";
+    cout << "| LiteAdminPanel by prorok, VinkW & c++\n";
 }
 
 
 void config() {
     system("mkdir LiteAdmin");
     ofstream fout(".\\LiteAdmin\\config.txt");
+    ofstream fout1(".\\LiteAdmin\\version.txt");
     fout << "no" << endl;
     fout << "server";
     fout.close();
+    fout1.close();
 }
 
 void setup() {
@@ -91,6 +94,9 @@ void error(int code) {
 
 int main()
 {
+    system("curl https://raw.githubusercontent.com/LiteAdminPanel/LiteAdminPanel/beta/source/version.txt > .\\LiteAdmin\\version.txt");
+    system("cls");
+
     cout << " _      _     " << endl;
     cout << "| |    /_\\   " << endl;
     cout << "| |_  /---\\  " << endl;
@@ -100,7 +106,8 @@ int main()
     cout << "[info] " << "If you have any issues pls say us about it(our contacts in /info)\n\n";
 
     ifstream fin(".\\LiteAdmin\\config.txt");
-    if (!fin.is_open()) {
+    ifstream fin1(".\\LiteAdmin\\version.txt");
+    if (!fin.is_open() || !fin1.is_open()) {
         config();
     }
 
@@ -112,7 +119,15 @@ int main()
     else {
         fin.getline(buff, 50);
         buf = buff;
-        cout << "[info] " << "LiteAdminPanel load config for '" << buf << "'\n";
+        cout << "[info] " << "LiteAdminPanel load config for '" << buf << "', version: " << version << endl;
+    }
+    fin1.getline(buff, 50);
+    buf = buff;
+    if (version == buf) {
+        cout << "[info] " << "you use last version of LiteAdmin!\n";
+    }
+    else {
+        cout << "[warn] " << "version: " << buf << " is available!\n";
     }
 
     while (output != "exit") {
